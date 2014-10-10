@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+$:.unshift("/Library/RubyMotionPre/lib")
+require 'motion/project/template/android'
+
+Motion::Project::App.setup do |app|
+  # Use `rake config' to see complete project settings.
+  app.name = 'Map Location'
+  app.api_version = '17'
+  app.sdk_path = "/Users/jh/ANDROID/sdk/"
+  app.ndk_path = "/Users/jh/ANDROID/ndk/"
+  app.package = "cz.jirihysek.androidweek2"
+
+  app.vendor_project :jar => 'vendor/google-play-services_lib/libs/google-play-services.jar',
+    :resources => 'vendor/google-play-services_lib/res',
+    :manifest => 'vendor/google-play-services_lib/AndroidManifest.xml'
+
+  %w{ACCESS_NETWORK_STATE ACCESS_FINE_LOCATION INTERNET WRITE_EXTERNAL_STORAGE}.each do |perm|
+    app.manifest_entry('uses-permission', :name => "android.permission.#{perm}")
+  end
+  app.manifest_entry('uses-permission', :name => 'com.google.android.providers.gsf.permission.READ_GSERVICES')
+
+  # Enable the Google Play Services library in the manifest file.
+  app.manifest_entry('application', 'meta-data',
+                     :name => 'com.google.android.gms.version',
+                     :value => '@integer/google_play_services_version')
+
+  app.logs_components << 'GooglePlayServicesUtil:I'
+
+  app.manifest_entry('application', 'meta-data',
+                     :name => 'com.google.android.maps.v2.API_KEY',
+                     :value => 'AIzaSyDTePnnx0_CqHkcjV6UjgGoKANyHCAKM78')
+end
